@@ -12,6 +12,7 @@ class Solution {
             }
         }
 
+        //Initialization step
         dp[0][0][0] = coins[0][0];
         if(coins[0][0] < 0){
             dp[0][0][1] = 0; 
