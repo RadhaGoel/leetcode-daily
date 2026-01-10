@@ -6,26 +6,26 @@ class Solution {
 
 
         //base case: delete remaining characters
-        for(int i = m-1; i >= 0; i--){
-            dp[i][n] = dp[i+1][n] + s1.charAt(i);//Adding ASCII value
+        for(int i = 1; i <= m ; i++){
+            dp[i][0] = dp[i-1][0] + s1.charAt(i-1);//Adding ASCII value
         }
 
-        for(int j = n-1; j >= 0; j--){
-            dp[m][j] = dp[m][j+1] + s2.charAt(j);
+        for(int j = 1; j <= n; j++){
+            dp[0][j] = dp[0][j-1] + s2.charAt(j-1);
         }
 
 
         // Fill DP Table
-        for(int i = m-1; i >= 0; i--){
-            for(int j = n-1; j >= 0; j--){
-                if(s1.charAt(i) == s2.charAt(j)){
-                    dp[i][j] = dp[i + 1][j + 1];
+        for(int i = 1; i < m+1; i++){
+            for(int j = 1; j < n+1; j++){
+                if(s1.charAt(i-1) == s2.charAt(j-1)){
+                    dp[i][j] = dp[i - 1][j - 1];
                 }
                 else{
-                    dp[i][j] = Math.min(s1.charAt(i) + dp[i+1][j], s2.charAt(j) + dp[i][j+1]);
+                    dp[i][j] = Math.min(s1.charAt(i-1) + dp[i-1][j], s2.charAt(j-1) + dp[i][j-1]);
                 }
             }
         }
-        return dp[0][0];
+        return dp[m][n];
     }
 }
