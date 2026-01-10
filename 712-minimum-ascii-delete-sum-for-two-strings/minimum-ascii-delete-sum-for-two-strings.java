@@ -6,11 +6,11 @@ class Solution {
 
 
         //base case: delete remaining characters
-        for(int i = 1; i <= m ; i++){
+        for(int i = 1; i < m+1 ; i++){
             dp[i][0] = dp[i-1][0] + s1.charAt(i-1);//Adding ASCII value
         }
 
-        for(int j = 1; j <= n; j++){
+        for(int j = 1; j < n+1; j++){
             dp[0][j] = dp[0][j-1] + s2.charAt(j-1);
         }
 
