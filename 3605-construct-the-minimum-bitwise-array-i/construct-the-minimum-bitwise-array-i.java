@@ -6,7 +6,6 @@ class Solution {
             int num = find(nums.get(i));
             ans[i] = num; 
         }
-        // System.out.println(find(11));
         return ans;
     }
     private int find(int num){
