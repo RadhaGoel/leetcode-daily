@@ -1,0 +1,100 @@
+import java.util.*;
+
+class Solution {
+
+    static class Pair {
+        long sum;
+        int index;
+
+        Pair(long sum, int index) {
+            this.sum = sum;
+            this.index = index;
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (!(o instanceof Pair)) return false;
+            Pair p = (Pair) o;
+            return sum == p.sum && index == p.index;
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(sum, index);
+        }
+    }
+
+    public int minimumPairRemoval(int[] nums) {
+        int n = nums.length;
+        if (n <= 1) return 0;
+
+        long[] values = new long[n];
+        for (int i = 0; i < n; i++) values[i] = nums[i];
+
+        int[] next = new int[n];
+        int[] prev = new int[n];
+
+        for (int i = 0; i < n; i++) {
+            next[i] = i + 1;
+            prev[i] = i - 1;
+        }
+
+        TreeSet<Pair> pairSums = new TreeSet<>(
+            (a, b) -> a.sum != b.sum
+                ? Long.compare(a.sum, b.sum)
+                : Integer.compare(a.index, b.index)
+        );
+
+        for (int i = 0; i < n - 1; i++)
+            pairSums.add(new Pair(values[i] + values[i + 1], i));
+
+        int inversions = 0;
+        for (int i = 0; i < n - 1; i++)
+            if (values[i] > values[i + 1])
+                inversions++;
+
+        int ops = 0;
+
+        while (inversions > 0) {
+            ops++;
+
+            Pair p = pairSums.pollFirst();
+            int i = p.index;
+            int j = next[i];
+
+            int pi = prev[i];
+            int nj = (j < n) ? next[j] : n;
+
+            // remove old inversions
+            if (pi >= 0 && values[pi] > values[i]) inversions--;
+            if (values[i] > values[j]) inversions--;
+            if (nj < n && values[j] > values[nj]) inversions--;
+
+            // remove old pairs
+            if (pi >= 0)
+                pairSums.remove(new Pair(values[pi] + values[i], pi));
+            if (j < n && nj < n)
+                pairSums.remove(new Pair(values[j] + values[nj], j));
+
+            // merge
+            values[i] += values[j];
+
+            // relink
+            next[i] = nj;
+            if (nj < n) prev[nj] = i;
+
+            // add new inversions
+            if (pi >= 0 && values[pi] > values[i]) inversions++;
+            if (nj < n && values[i] > values[nj]) inversions++;
+
+            // add new pairs
+            if (pi >= 0)
+                pairSums.add(new Pair(values[pi] + values[i], pi));
+            if (nj < n)
+                pairSums.add(new Pair(values[i] + values[nj], i));
+        }
+
+        return ops;
+    }
+}
