@@ -1,27 +1,22 @@
 class Solution {
     public int countElements(int[] nums) {
+        int min = Integer.MAX_VALUE;
+        int max = Integer.MIN_VALUE;
+
+        // Find min and max
+        for (int x : nums) {
+            min = Math.min(min, x);
+            max = Math.max(max, x);
+        }
+
         int count = 0;
-        for(int target : nums){
-            if(smaller(target, nums) && greater(target, nums)){
+        // Count elements strictly between min and max
+        for (int x : nums) {
+            if (x > min && x < max) {
                 count++;
             }
         }
+
         return count;
-    }
-    private boolean smaller(int target, int nums[]){
-        for(int i = 0; i < nums.length; i++){
-            if(target < nums[i]){
-                return true;
-            }
-        }
-        return false;
-    }
-    private boolean greater(int target, int nums[]){
-        for(int i = 0; i < nums.length; i++){
-            if(target > nums[i]){
-                return true;
-            }
-        }
-        return false;
     }
 }
