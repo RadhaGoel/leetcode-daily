@@ -1,13 +1,13 @@
 class Solution {
-
     public int[][] reverseSubmatrix(int[][] grid, int x, int y, int k) {
-        for (int i0 = x, i1 = x + k - 1; i0 < i1; i0++, i1--) {
-            for (int j = y; j < y + k; j++) {
-                int temp = grid[i0][j];
-                grid[i0][j] = grid[i1][j];
-                grid[i1][j] = temp;
+        for (int i = 0; i < k; i++) {
+            for (int j = 0; j < k >> 1; j++) {
+                int temp = grid[x + j][y + i];
+                grid[x + j][y + i] = grid[x + k - j - 1][y + i];
+                grid[x + k - j - 1][y + i] = temp;
             }
         }
+
         return grid;
     }
 }
